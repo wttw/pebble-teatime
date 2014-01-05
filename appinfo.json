@@ -1,0 +1,25 @@
+{
+    "uuid": "350a6aae-8cd4-41a5-9d02-825ec9964b5d",
+    "shortName": "teatime",
+    "longName": "teatime",
+    "companyName": "Word to the Wise",
+    "versionCode": 1,
+    "versionLabel": "1.0.0",
+    "watchapp": {
+        "watchface": false
+    },
+    "capabilities" : ["configurable"],
+    "appKeys": {
+        "dummy": 0
+    },
+    "resources": {
+        "media": [
+            {
+                "type": "png",
+                "name": "IMAGE_TEA",
+                "file": "images/tea.png",
+                "menuIcon": true
+            }
+        ]
+    }
+}

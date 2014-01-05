@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>teatime</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.0/jquery.mobile-1.4.0.min.css" />
+    <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.4.0/jquery.mobile-1.4.0.min.js"></script>
+  </head>
+  <body>
+    <div data-role="page" id="main">
+      <div data-role="header" class="jqm-header">
+        <h1>teatime</h1>
+      </div>
+      <div data-role="content" class="ui-content">
+        <p>Make any changes, then scroll down and hit "Save"</p>
+        <div id="conflist">
+          
+        </div>
+      </div>
+      <div class="ui-body ui-body-b">
+        <fieldset class="ui-grid-a">
+          <div class="ui-block-a"><button type="submit" data-theme="d" id="b-cancel">Cancel</button></div>
+            <div class="ui-block-b"><button type="submit" data-theme="a" id="b-submit">Save</button></div>
+        </fieldset>
+      </div>
+    </div>
+    <script type="t/template" id="tpl">
+      <div class="ui-field-contain">
+      <fieldset data-role="controlgroup">
+        <label for="name{{=idx}}">Name</label>
+        <input type="text" value="{{%name}}" id="name{{=idx}}"{{!name}} placeholder="Add new tea"{{/!name}}>
+        <label for="comment{{=idx}}">Comment</label>
+        <input type="text" value="{{%comment}}" id="comment{{=idx}}" >
+        <label for="low{{=idx}}">First alert</label>
+        <select id="low{{=idx}}">
+          <option value="1">&#188; minute</option>
+          <option value="2">&#189; minute</option>
+          <option value="3">&#190; minute</option>
+          <option value="4">1 minute</option>
+          <option value="5">1&#188; minutes</option>
+          <option value="6">1&#189; minutes</option>
+          <option value="7">1&#190; minutes</option>
+          <option value="8">2 minutes</option>
+          <option value="9">2&#188; minutes</option>
+          <option value="10">2&#189; minutes</option>
+          <option value="11">2&#190; minutes</option>
+          <option value="12">3 minutes</option>
+          <option value="13">3&#188; minutes</option>
+          <option value="14">3&#189; minutes</option>
+          <option value="15">3&#190; minutes</option>
+          <option value="16">4 minutes</option>
+          <option value="17">4&#188; minutes</option>
+          <option value="18">4&#189; minutes</option>
+          <option value="19">4&#190; minutes</option>
+          <option value="20">5 minutes</option>
+          <option value="21">5&#188; minutes</option>
+          <option value="22">5&#189; minutes</option>
+          <option value="23">5&#190; minutes</option>
+          <option value="24">6 minutes</option>
+          <option value="25">6&#188; minutes</option>
+          <option value="26">6&#189; minutes</option>
+          <option value="27">6&#190; minutes</option>
+          <option value="28">7 minutes</option>
+          <option value="29">7&#188; minutes</option>
+          <option value="30">7&#189; minutes</option>
+          <option value="31">7&#190; minutes</option>
+          <option value="32">8 minutes</option>
+          <option value="33">8&#188; minutes</option>
+          <option value="34">8&#189; minutes</option>
+          <option value="35">8&#190; minutes</option>
+          <option value="36">9 minutes</option>
+          <option value="37">9&#188; minutes</option>
+          <option value="38">9&#189; minutes</option>
+          <option value="39">9&#190; minutes</option>
+          <option value="40">10 minutes</option>
+        </select>
+        <label for="high{{=idx}}">Second alert</label>
+        <select id="high{{=idx}}">
+          <option value="1">&#188; minute</option>
+          <option value="2">&#189; minute</option>
+          <option value="3">&#190; minute</option>
+          <option value="4">1 minute</option>
+          <option value="5">1&#188; minutes</option>
+          <option value="6">1&#189; minutes</option>
+          <option value="7">1&#190; minutes</option>
+          <option value="8">2 minutes</option>
+          <option value="9">2&#188; minutes</option>
+          <option value="10">2&#189; minutes</option>
+          <option value="11">2&#190; minutes</option>
+          <option value="12">3 minutes</option>
+          <option value="13">3&#188; minutes</option>
+          <option value="14">3&#189; minutes</option>
+          <option value="15">3&#190; minutes</option>
+          <option value="16">4 minutes</option>
+          <option value="17">4&#188; minutes</option>
+          <option value="18">4&#189; minutes</option>
+          <option value="19">4&#190; minutes</option>
+          <option value="20">5 minutes</option>
+          <option value="21">5&#188; minutes</option>
+          <option value="22">5&#189; minutes</option>
+          <option value="23">5&#190; minutes</option>
+          <option value="24">6 minutes</option>
+          <option value="25">6&#188; minutes</option>
+          <option value="26">6&#189; minutes</option>
+          <option value="27">6&#190; minutes</option>
+          <option value="28">7 minutes</option>
+          <option value="29">7&#188; minutes</option>
+          <option value="30">7&#189; minutes</option>
+          <option value="31">7&#190; minutes</option>
+          <option value="32">8 minutes</option>
+          <option value="33">8&#188; minutes</option>
+          <option value="34">8&#189; minutes</option>
+          <option value="35">8&#190; minutes</option>
+          <option value="36">9 minutes</option>
+          <option value="37">9&#188; minutes</option>
+          <option value="38">9&#189; minutes</option>
+          <option value="39">9&#190; minutes</option>
+          <option value="40">10 minutes</option>
+        </select>
+        <div data-role="fieldcontain">
+        <label for="enabled{{=idx}}">Enabled</label>
+        <input type="checkbox" data-role="flipswitch" id="enabled{{=idx}}" {{enabled}} checked{{/enabled}}>
+        </div>
+      </fieldset>
+      </div>
+    </script>
+    <script>
+(function() {
+
+	var blockregex = /\{\{(([@!]?)(.+?))\}\}(([\s\S]+?)(\{\{:\1\}\}([\s\S]+?))?)\{\{\/\1\}\}/g,
+		valregex = /\{\{([=%])(.+?)\}\}/g;
+
+	function t(template) {
+		this.t = template;
+	}
+
+	function scrub(val) {
+		return new Option(val).innerHTML.replace(/"/g,"&quot;");
+	}
+
+	function get_value(vars, key) {
+		var parts = key.split('.');
+		while (parts.length) {
+			if (!(parts[0] in vars)) {
+				return false;
+			}
+			vars = vars[parts.shift()];
+		}
+		return vars;
+	}
+
+	function render(fragment, vars) {
+		return fragment
+			.replace(blockregex, function(_, __, meta, key, inner, if_true, has_else, if_false) {
+
+				var val = get_value(vars,key), temp = "", i;
+
+				if (!val) {
+
+					// handle if not
+					if (meta == '!') {
+						return render(inner, vars);
+					}
+					// check for else
+					if (has_else) {
+						return render(if_false, vars);
+					}
+
+					return "";
+				}
+
+				// regular if
+				if (!meta) {
+					return render(if_true, vars);
+				}
+
+				// process array/obj iteration
+				if (meta == '@') {
+					// store any previous vars
+					// reuse existing vars
+					_ = vars._key;
+					__ = vars._val;
+					for (i in val) {
+						if (val.hasOwnProperty(i)) {
+							vars._key = i;
+							vars._val = val[i];
+							temp += render(inner, vars);
+						}
+					}
+					vars._key = _;
+					vars._val = __;
+					return temp;
+				}
+
+			})
+			.replace(valregex, function(_, meta, key) {
+				var val = get_value(vars,key);
+
+				if (val || val === 0) {
+					return meta == '%' ? scrub(val) : val;
+				}
+				return "";
+			});
+	}
+
+	t.prototype.render = function (vars) {
+		return render(this.t, vars);
+	};
+
+	window.t = t;
+
+})();
+    </script>
+    <script>
+      $().ready(function() {
+      var hash = window.location.hash;
+      var conf = JSON.parse(decodeURIComponent(hash.substr(1)));
+      var tpl = new t(document.getElementById('tpl').innerHTML);
+      for(var i=0; i<conf.length; i++) {
+        $('#conflist').append(tpl.render({
+          enabled: conf[i][0],
+          name: conf[i][1],
+          comment: conf[i][2],
+          idx: i
+        }));
+        var id = '#low' + i;
+        $('#low' + i).val(conf[i][3]);
+        $('#high' + i).val(conf[i][4]);
+      }
+      $('#conflist').append(tpl.render({
+        enabled: true,
+        name: '',
+        comment: '',
+        idx: conf.length
+      }));
+
+        $("#b-cancel").click(function() {
+          document.location = "pebblejs://close#";
+        });
+        $("#b-submit").click(function() {
+          var conf = [];
+          var i=0;
+          while($('#name'+i).length) {
+            var name = $('#name'+i).val();
+            if(name.length) {
+              conf.push([
+                $('#enabled'+i).is(':checked'),
+                name,
+                $('#comment'+i).val(),
+                +$('#low'+i).val(),
+                +$('#high'+i).val()
+              ]);
+            }
+            i++;
+          }
+          var location = "pebblejs://close#" + encodeURIComponent(JSON.stringify(conf));
+          document.location = location;
+        });
+      });
+    </script>
+  </body>
+</html>
