@@ -6,7 +6,7 @@ function msg_ack(e) {
 }
 
 function msg_nak(e) {
-  console.log("nak, resending");
+//  console.log("nak, resending");
   sendMessages();
 }
 
@@ -17,7 +17,6 @@ function sendMessages() {
 }
 
 Pebble.addEventListener("ready", function(e) {
-  console.log("ready");
   if(!localStorage.getItem("config")) {
     var teas = [
       [false, "White", "1 tbsp, 175-185F", 4, 12],
@@ -33,7 +32,6 @@ Pebble.addEventListener("ready", function(e) {
 });
 
 Pebble.addEventListener("appmessage", function(e) {
-  console.log("Received message: " + e.payload);
   updateMenu(localStorage.getItem("config"));
 });
 
@@ -65,18 +63,16 @@ function updateMenu(conf) {
 }
 
 Pebble.addEventListener("showConfiguration", function(e) {
-  console.log("Showing config");
   var loc = 'http://teatime.blighty.com/teatime.html#' + 
     encodeURIComponent(localStorage.getItem("config"));
-  console.log("redirecting to " + loc);
+//  console.log("redirecting to " + loc);
   Pebble.openURL(loc);
 });
 
 Pebble.addEventListener("webviewclosed", function(e) {
-  console.log("config closed");
-  if(e.response.length) {
+  if(e.response && e.response.length) {
     var config = decodeURIComponent(e.response);
-    console.log("New config = " + config);
+//    console.log("New config = " + config);
     localStorage.setItem("config", config);
     updateMenu(config);
   }

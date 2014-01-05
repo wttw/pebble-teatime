@@ -7,7 +7,6 @@ static TextLayer *name_layer;
 static TextLayer *content_layer;
 static Layer *progress_layer;
 static BitmapLayer *image_layer;
-static InverterLayer *inverter_layer;
 
 static int num_entries;
 static int selected_entry;
@@ -60,8 +59,8 @@ static void menu_select_callback(MenuLayer *menu, MenuIndex *cell_index, void *d
 static void progress_paint_callback(Layer *layer, GContext *ctx)
 {
   GRect bounds = layer_get_bounds(layer);
-  graphics_context_set_stroke_color(ctx, GColorBlack);
-  graphics_context_set_fill_color(ctx, GColorBlack);
+  graphics_context_set_stroke_color(ctx, GColorWhite);
+  graphics_context_set_fill_color(ctx, GColorWhite);
   graphics_draw_rect(ctx, bounds);
   /* Checks */
   int h = bounds.size.h - PROGRESS_MARGIN * 2;
@@ -129,17 +128,29 @@ static void window_unload(Window *window) {
 }
 
 static void timer_window_load(Window *window) {
+  window_set_background_color(window, GColorBlack);
   Layer *window_layer = window_get_root_layer(window);
   GRect bounds = layer_get_frame(window_layer);
+
+  image = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_TEA);
+  image_layer = bitmap_layer_create(bounds);
+  bitmap_layer_set_bitmap(image_layer, image);
+  bitmap_layer_set_alignment(image_layer, GAlignCenter);
+  bitmap_layer_set_compositing_mode(image_layer, GCompOpAssignInverted);
+  layer_add_child(window_layer, bitmap_layer_get_layer(image_layer));
 
   name_layer = text_layer_create(GRect(0, 10, bounds.size.w, 28));
   text_layer_set_font(name_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
   text_layer_set_text_alignment(name_layer, GTextAlignmentCenter);
+  text_layer_set_background_color(name_layer, GColorBlack);
+  text_layer_set_text_color(name_layer, GColorWhite);
   layer_add_child(window_layer, text_layer_get_layer(name_layer));
 
   content_layer = text_layer_create(GRect(0, 36, bounds.size.w, 28));
   text_layer_set_font(content_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18));
   text_layer_set_text_alignment(content_layer, GTextAlignmentCenter);
+  text_layer_set_background_color(content_layer, GColorBlack);
+  text_layer_set_text_color(content_layer, GColorWhite);
   layer_add_child(window_layer, text_layer_get_layer(content_layer));
 
   bar_total = bounds.size.w - 10 - 2 * PROGRESS_MARGIN;
@@ -147,14 +158,7 @@ static void timer_window_load(Window *window) {
   layer_set_update_proc(progress_layer, progress_paint_callback);
   layer_add_child(window_layer, progress_layer);
 
-  image = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_TEA);
-  image_layer = bitmap_layer_create(bounds);
-  bitmap_layer_set_bitmap(image_layer, image);
-  bitmap_layer_set_alignment(image_layer, GAlignCenter);
-  layer_add_child(window_layer, bitmap_layer_get_layer(image_layer));
   
-  inverter_layer = inverter_layer_create(bounds);
-  layer_add_child(window_layer, inverter_layer_get_layer(inverter_layer));
 }
 
 static void timer_window_appear(Window *window) {
@@ -179,7 +183,6 @@ static void timer_window_unload(Window *window) {
   layer_destroy(progress_layer);
   bitmap_layer_destroy(image_layer);
   gbitmap_destroy(image);
-  inverter_layer_destroy(inverter_layer);
 }
 
 static void message_received(DictionaryIterator *iter, void *context)
