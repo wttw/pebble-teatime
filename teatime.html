@@ -9,31 +9,35 @@
     <script src="http://code.jquery.com/mobile/1.4.0/jquery.mobile-1.4.0.min.js"></script>
   </head>
   <body>
-    <div data-role="page" id="main">
-      <div data-role="header" class="jqm-header">
-        <h1>teatime</h1>
+    <div data-role="page" id="main" class="ui-page-theme-b">
+      <div class="ui-body ui-body-b">
+	<fieldset>
+          <button type="submit" data-theme="b" class="b-submit" style="border-color: #ff4500;">Save</button>
+        </fieldset>
       </div>
       <div data-role="content" class="ui-content">
-        <p>Make any changes, then scroll down and hit "Save"</p>
-        <div id="conflist">
-          
-        </div>
+	<div id="conflist">
+        
+	</div>
       </div>
       <div class="ui-body ui-body-b">
-        <fieldset class="ui-grid-a">
-          <div class="ui-block-a"><button type="submit" data-theme="d" id="b-cancel">Cancel</button></div>
-            <div class="ui-block-b"><button type="submit" data-theme="a" id="b-submit">Save</button></div>
+	<fieldset>
+          <button type="submit" data-theme="b" class="b-submit" style="border-color: #ff4500;">Save</button>
         </fieldset>
       </div>
     </div>
+
     <script type="t/template" id="tpl">
       <div class="ui-field-contain">
       <fieldset data-role="controlgroup">
-        <label for="name{{=idx}}">Name</label>
-        <input type="text" value="{{%name}}" id="name{{=idx}}"{{!name}} placeholder="Add new tea"{{/!name}}>
-        <label for="comment{{=idx}}">Comment</label>
-        <input type="text" value="{{%comment}}" id="comment{{=idx}}" >
-        <label for="low{{=idx}}">First alert</label>
+	<div data-role="fieldcontain" class="ui-hide-label">
+          <label for="name{{=idx}}">Tea</label>
+          <input type="text" value="{{%name}}" id="name{{=idx}}"{{!name}} placeholder="Add new tea"{{/!name}}>
+          <label for="comment{{=idx}}">Comment</label>
+          <input type="text" value="{{%comment}}" id="comment{{=idx}}" placeholder="Description">
+	</div>
+	<div data-role="fieldcontain" class="ui-hide-label">
+        <label for="low{{=idx}}">Alerts</label>
         <select id="low{{=idx}}">
           <option value="1">&#188; minute</option>
           <option value="2">&#189; minute</option>
@@ -76,7 +80,7 @@
           <option value="39">9&#190; minutes</option>
           <option value="40">10 minutes</option>
         </select>
-        <label for="high{{=idx}}">Second alert</label>
+
         <select id="high{{=idx}}">
           <option value="1">&#188; minute</option>
           <option value="2">&#189; minute</option>
@@ -119,9 +123,10 @@
           <option value="39">9&#190; minutes</option>
           <option value="40">10 minutes</option>
         </select>
+	</div>
         <div data-role="fieldcontain">
         <label for="enabled{{=idx}}">Enabled</label>
-        <input type="checkbox" data-role="flipswitch" id="enabled{{=idx}}" {{enabled}} checked{{/enabled}}>
+        <input type="checkbox" data-role="flipswitch" data-on-text="Yes" data-off-text="No" id="enabled{{=idx}}" {{enabled}} checked{{/enabled}}>
         </div>
       </fieldset>
       </div>
@@ -235,11 +240,9 @@
         comment: '',
         idx: conf.length
       }));
+$('#conflist').enhanceWithin();
 
-        $("#b-cancel").click(function() {
-          document.location = "pebblejs://close#";
-        });
-        $("#b-submit").click(function() {
+        $(".b-submit").click(function() {
           var conf = [];
           var i=0;
           while($('#name'+i).length) {
