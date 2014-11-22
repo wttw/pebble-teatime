@@ -19,7 +19,7 @@ static int saved_current;
 static AppTimer *timer;
 static GBitmap *image;
 
-#define STORAGE_VERSION 1
+#define STORAGE_VERSION 2
 
 #define STORE_BASE 123400000
 #define STORE_VERSION 1 + STORE_BASE
@@ -249,12 +249,16 @@ static void message_dropped(AppMessageResult reason, void *context)
 static void init(void) {
   num_entries = 0;
   for(int i=0; i<MAX_ENTRIES; ++i) {
-    strcpy(entries[i].name, "invalid");
-    strcpy(entries[i].content, "invalid");
-    entries[i].quarts_low = 4;
-    entries[i].quarts_high = 4;
+    strcpy(entries[i].name, "Default tea");
+    strcpy(entries[i].content, "Make in the usual way");
+    entries[i].quarts_low = 12;
+    entries[i].quarts_high = 20;
   }
-#ifdef USE_PERSIST
+
+  app_message_register_inbox_received(message_received);
+  app_message_register_inbox_dropped(message_dropped);
+  app_message_open(app_message_inbox_size_maximum(), 100);
+
   int ret;
   if(!persist_exists(STORE_VERSION) ||
      STORAGE_VERSION != persist_read_int(STORE_VERSION)) {
@@ -262,35 +266,26 @@ static void init(void) {
     APP_LOG(APP_LOG_LEVEL_DEBUG, "Setting app config");
     ret = persist_write_int(STORE_VERSION, STORAGE_VERSION);
     APP_LOG(APP_LOG_LEVEL_DEBUG, "STORE_VERSION: %d", ret);
-    num_entries = sizeof(default_entries) / sizeof(default_entries[0]);
-    APP_LOG(APP_LOG_LEVEL_DEBUG, "num_entries here is %d", num_entries);
-    ret = persist_write_int(STORE_SIZE, num_entries);
-    APP_LOG(APP_LOG_LEVEL_DEBUG, "STORE_SIZE: %d", ret);
-
-    for(int i=0; i<num_entries; ++i) {
-      persist_write_data(STORE_ENTRY+i, default_entries+i, sizeof(tea_entry));
-    }
+    ret = persist_write_int(STORE_SIZE, 0);
+    DictionaryIterator *iter;
+    app_message_outbox_begin(&iter);
+    dict_write_cstring(iter, 0, "c");
+    app_message_outbox_send();
   }
   num_entries = persist_read_int(STORE_SIZE);
-  entries = malloc(num_entries * sizeof(tea_entry));
+
   for(int i=0; i<num_entries; ++i) {
     persist_read_data(STORE_ENTRY+i, entries+i, sizeof(tea_entry));
   }
-#else
+  if (num_entries == 0) {
+    num_entries = 1;
+  }
+
   saved_current = -1;
   if(persist_exists(STORE_CURRENT)) {
     saved_current = persist_read_int(STORE_CURRENT);
   }
   /*  APP_LOG(APP_LOG_LEVEL_DEBUG, "Reading config from phone"); */
-  app_message_register_inbox_received(message_received);
-  app_message_register_inbox_dropped(message_dropped);
-  app_message_open(app_message_inbox_size_maximum(), 100);
-  DictionaryIterator *iter;
-  app_message_outbox_begin(&iter);
-  dict_write_cstring(iter, 0, "c");
-  app_message_outbox_send();
-#endif
-
   
   window = window_create();
   window_set_window_handlers(window, (WindowHandlers) {
