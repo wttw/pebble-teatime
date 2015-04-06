@@ -17,7 +17,9 @@ function sendMessages() {
 }
 
 Pebble.addEventListener("ready", function(e) {
-  if(!localStorage.getItem("config")) {
+  var config = localStorage.getItem("config");
+  // "CANCELLED" is to work around an old bug that stored that string when the browser was closed using the back button on Android.
+  if(!config || config=="CANCELLED") {
     var teas = [
       [false, "White", "1 tbsp, 175-185F", 4, 12],
       [false, "Chinese Green", "1 tsp, 185F", 12, 12],
@@ -63,7 +65,7 @@ function updateMenu(conf) {
 }
 
 Pebble.addEventListener("showConfiguration", function(e) {
-  var loc = 'http://teatime.blighty.com/teatime.html#' + 
+  var loc = 'http://teatime.blighty.com/teatime.html#' +
     encodeURIComponent(localStorage.getItem("config"));
 //  console.log("redirecting to " + loc);
   Pebble.openURL(loc);
@@ -73,7 +75,9 @@ Pebble.addEventListener("webviewclosed", function(e) {
   if(e.response && e.response.length) {
     var config = decodeURIComponent(e.response);
 //    console.log("New config = " + config);
-    localStorage.setItem("config", config);
-    updateMenu(config);
+    if(config != "CANCELLED") {
+      localStorage.setItem("config", config);
+      updateMenu(config);
+    }
   }
 });
